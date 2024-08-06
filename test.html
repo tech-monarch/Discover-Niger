@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #searchInput:focus {
+            border-color: #007bff;
+        }
+
+        #results {
+            margin-top: 20px;
+        }
+
+        .result-item {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        .result-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .result-item strong {
+            display: block;
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .result-item p {
+            font-size: 14px;
+            color: #666;
+            margin: 0;
+        }
+
+        @media (min-width: 768px) {
+            #searchInput {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="searchInput" placeholder="Search..." oninput="performSearch()">
+    <div id="results"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.basic.min.js"></script>
+    <script>
+        // Sample data
+        const data = [
+            { title: "<a href='index.html#governor'>MEET OUR EXECUTIVE GOVERNOR</a>", content: "<a href='index.html'>Learn the basics of JavaScript.</a>" },
+
+            { title: "<a href='index.html#Executive-councils'>THE CURRENT STATE EXECUTIVE COUNCIL MEMBERS", content: "Deep dive into advanced CSS techniques.</a>" },
+
+            { title: "<a href='index.html'>Niger State", content: "How HTML5 improves SEO.</a>" },
+
+            { title: "<a href='index.html#Emirate-council'>EMIRATE COUNCILS OF NIGER STATE", content: "How HTML5 improves SEO.</a>" },
+
+            { title: "<a href='index.html#Past-executive-councils'>THE PAST STATE EXECUTIVE COUNCIL MEMBERS", content: "How HTML5 improves SEO.</a>" },
+
+            { title: "<a href='index.html#assembly-members'>THE STATE ASSEMBLY MEMBERS", content: "How HTML5 improves SEO.</a>" },
+
+            { title: "<a href='index.html#biography'>BIOGRAPHY OF OUR PRESENT & FORMER GOVERNORS", content: "How HTML5 improves SEO.</a>" },
+
+            { title: "<a href='tourism.html'>OUR MOST POPULAR TOURIST ATTRACTIONS", content: "How HTML5 improves SEO.</a>" },
+
+            { title: "<a href='blog.html'>LATEST NEWS", content: "How HTML5 improves SEO.</a>" },
+
+
+            // PEOPLE
+        ];
+
+        // Initialize Fuse.js
+        const options = {
+            includeScore: true,
+            keys: ['title', 'content']
+        };
+
+        const fuse = new Fuse(data, options);
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value;
+            const results = fuse.search(query);
+
+            displayResults(results);
+        }
+
+        function displayResults(results) {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
+
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<p>No results found.</p>';
+                return;
+            }
+
+            results.forEach(result => {
+                const item = document.createElement('div');
+                item.classList.add('result-item');
+                item.innerHTML = `<strong>${result.item.title}</strong><p>${result.item.content}</p>`;
+                resultsContainer.appendChild(item);
+            });
+        }
+    </script>
+</body>
+</html>
